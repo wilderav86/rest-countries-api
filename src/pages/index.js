@@ -5,7 +5,22 @@ import CardContainer from "@/components/cardContainer/CardContainer";
 // import CardContainer from "./components/cardContainer/cardContainer";
 import styles from "@/styles/pageStyles/Home.module.scss";
 
-export default function Home() {
+export const getStaticProps = async (context) => {
+  const baseUrl = "https://restcountries.com/v2/all";
+  // const url = createUrl(baseUrl, {
+  //   fields: ["name", "population", "region", "capital", "flags"],
+  // });
+  // const data = fetchApiData(url);
+
+  const response = await fetch(
+    "https://restcountries.com/v2/all?fields=name%2Cpopulation%2Cregion%2Ccapital%2Cflags"
+  );
+  const data = await response.json();
+
+  return { props: { data } };
+};
+
+export default function Home({ data }) {
   return (
     <>
       <Head>
@@ -16,7 +31,7 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <TitleBar />
-        <CardContainer />
+        <CardContainer data={data} />
       </main>
     </>
   );

@@ -1,10 +1,13 @@
+import { createUrl } from "@/functions/createUrl";
+import { fetchApiData } from "@/functions/fetchApiData";
 import useFetch from "@/hooks/useFetch";
 import useUrl from "@/hooks/useUrl";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Card from "../card/Card";
 
-const CardContainer = () => {
+const CardContainer = ({ data }) => {
+  console.log(data);
   // const [loading, setLoading] = useState(true);
   // const [allCountriesData, setAllCountriesData] = useState(null);
 
@@ -13,23 +16,20 @@ const CardContainer = () => {
   const url = useUrl(baseUrl, {
     fields: ["name", "population", "region", "capital", "flags"],
   });
+  console.log(url);
 
-  // const url = useUrl(baseUrl, ["name", "population"]);
+  // const { loading, apiData } = useFetch(url);
+  // console.log("loading", loading, "ap8idata", apiData);
 
-  const { loading, apiData } = useFetch(url);
-  console.log("loading", loading, "ap8idata", apiData);
-  // setAllCountriesData(apiData);
-  // setLoading(loading);
-
-  const renderCards = apiData.map((cardData, key) => {
+  const renderCards = data.map((cardData, key) => {
     return (
       <Link href={"/" + cardData.name} key={key}>
-        <Card data={cardData} loading={loading} />
+        <Card data={cardData} />
       </Link>
     );
   });
 
-  return <>{!loading && renderCards}</>;
+  return <>{renderCards}</>;
 };
 
 export default CardContainer;

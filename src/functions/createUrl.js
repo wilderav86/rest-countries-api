@@ -1,4 +1,4 @@
-const useUrl = (baseUrl, params) => {
+export const createUrl = (baseUrl, params) => {
   let url = new URL(baseUrl);
   let searchParams = new URLSearchParams(url.search);
 
@@ -6,7 +6,7 @@ const useUrl = (baseUrl, params) => {
     url.searchParams.set(key, value);
   }
 
+  console.log(url, "url");
+
   return url;
 };
-
-export default useUrl;

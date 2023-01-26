@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const { default: Image } = require("next/image");
 
 export const getServerSideProps = async (context) => {
@@ -31,6 +33,9 @@ const Detail = ({ params, data }) => {
   console.log(languages);
   return (
     <div className="container">
+      <Link href="/">
+        <button>back</button>
+      </Link>
       <Image src={png} alt="country flag" width={300} height={200} />
       <div className="info">
         <h1 className="title"></h1>
