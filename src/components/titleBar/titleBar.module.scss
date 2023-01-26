@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border-bottom: 1px solid black;
+}
+
+.title {
+  margin-left: 5%;
+}
+
+.themeSwitchBtn {
+  margin-right: 5%;
+}
