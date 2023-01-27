@@ -1,33 +1,39 @@
+import { createUrl } from "@/functions/createUrl";
+import { fetchApiData } from "@/functions/fetchApiData";
 import Link from "next/link";
 
 const { default: Image } = require("next/image");
 
 export const getServerSideProps = async (context) => {
   const url = `https://restcountries.com/v2/name/${context.params.detail}`;
+  // const url = createUrl("name", context.params.detail);
 
   const response = await fetch(url);
   const data = await response.json();
+
   return {
-    props: { params: context.params, data },
+    props: { params: context.params, data: data.at(0) },
   };
 };
 
 const Detail = ({ params, data }) => {
   console.log("params", params, "data", data);
 
-  // how to destructure without use of data index
-  const { nativeName, population, region, subregion, capital, topLevelDomain } =
-    data[0];
-  const { png } = data[0].flags;
-  const [...currencies] = data[0].currencies;
-  const [...languages] = data[0].languages;
+  const {
+    nativeName,
+    population,
+    region,
+    subregion,
+    capital,
+    topLevelDomain,
+    currencies,
+    languages,
+    flags: { png },
+  } = data;
 
-  //how to call this function inside jsx
-  const renderList = (list) => {
-    list.map((item, key) => {
-      console.log(item.name.toString());
-      return <p>'hiu'</p>;
-    });
+  const renderListItem = ({ name }, index, list) => {
+    if (list.length - 1 === index) name += ", ";
+    return <span key={name + index}>{name}</span>;
   };
 
   console.log(languages);
@@ -58,26 +64,8 @@ const Detail = ({ params, data }) => {
           <li>
             Top Level Domain: <span>{topLevelDomain}</span>
           </li>
-          <li>
-            Currencies:{" "}
-            {currencies.map((currency) =>
-              currencies.length - 1 === currencies.lastIndexOf(currency) ? (
-                <span>{currency.name}</span>
-              ) : (
-                <span>{currency.name}, </span>
-              )
-            )}
-          </li>
-          <li>
-            Languages:{" "}
-            {languages.map((language) =>
-              languages.length - 1 === languages.lastIndexOf(language) ? (
-                <span>{language.name}</span>
-              ) : (
-                <span>{language.name}, </span>
-              )
-            )}
-          </li>
+          <li>Currencies: {currencies.map(renderListItem)}</li>
+          <li>Languages: {languages.map(renderListItem)}</li>
         </ul>
       </div>
     </div>

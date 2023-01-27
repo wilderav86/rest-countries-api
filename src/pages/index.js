@@ -1,26 +1,34 @@
 import Head from "next/head";
 import TitleBar from "@/components/titleBar/TitleBar";
 import CardContainer from "@/components/cardContainer/CardContainer";
-// import TitleBar from "./components/titleBar/TitleBar";
-// import CardContainer from "./components/cardContainer/cardContainer";
+import { createUrl } from "@/functions/createUrl";
 import styles from "@/styles/pageStyles/Home.module.scss";
+import { useContext, useEffect } from "react";
+import {
+  AllCountryContext,
+  AllCountryContextProvider,
+} from "@/contexts/AllCountryContext";
 
-export const getStaticProps = async (context) => {
-  const baseUrl = "https://restcountries.com/v2/all";
-  // const url = createUrl(baseUrl, {
-  //   fields: ["name", "population", "region", "capital", "flags"],
-  // });
-  // const data = fetchApiData(url);
+export const getStaticProps = async () => {
+  const url = createUrl("all", {
+    fields: ["name", "population", "region", "capital", "flags"],
+  });
 
-  const response = await fetch(
-    "https://restcountries.com/v2/all?fields=name%2Cpopulation%2Cregion%2Ccapital%2Cflags"
-  );
+  const response = await fetch(url);
   const data = await response.json();
 
   return { props: { data } };
 };
 
 export default function Home({ data }) {
+  const [allCountryData, setAllCountryData] = useContext(AllCountryContext);
+
+  useEffect(() => {
+    setAllCountryData(data);
+  }, []);
+
+  console.log(allCountryData);
+
   return (
     <>
       <Head>
@@ -29,10 +37,12 @@ export default function Home({ data }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <TitleBar />
-        <CardContainer data={data} />
-      </main>
+      <AllCountryContextProvider>
+        <main className={styles.main}>
+          <TitleBar />
+          <CardContainer data={data} />
+        </main>
+      </AllCountryContextProvider>
     </>
   );
 }

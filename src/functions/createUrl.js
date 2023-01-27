@@ -1,5 +1,7 @@
-export const createUrl = (baseUrl, params) => {
-  let url = new URL(baseUrl);
+const baseHref = "https://restcountries.com/v2/";
+
+export const createUrl = (path, params = {}) => {
+  let url = new URL(path, baseHref);
   let searchParams = new URLSearchParams(url.search);
 
   for (const [key, value] of Object.entries(params)) {
