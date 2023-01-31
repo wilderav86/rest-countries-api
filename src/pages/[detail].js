@@ -1,12 +1,9 @@
-import { createUrl } from "@/functions/createUrl";
-import { fetchApiData } from "@/functions/fetchApiData";
 import Link from "next/link";
 
 const { default: Image } = require("next/image");
 
 export const getServerSideProps = async (context) => {
   const url = `https://restcountries.com/v2/name/${context.params.detail}`;
-  // const url = createUrl("name", context.params.detail);
 
   const response = await fetch(url);
   const data = await response.json();
@@ -17,8 +14,6 @@ export const getServerSideProps = async (context) => {
 };
 
 const Detail = ({ params, data }) => {
-  console.log("params", params, "data", data);
-
   const {
     nativeName,
     population,
@@ -36,7 +31,8 @@ const Detail = ({ params, data }) => {
     return <span key={name + index}>{name}</span>;
   };
 
-  console.log(languages);
+  console.log("map", currencies.map(renderListItem));
+
   return (
     <div className="container">
       <Link href="/">

@@ -3,11 +3,13 @@ import TitleBar from "@/components/titleBar/TitleBar";
 import CardContainer from "@/components/cardContainer/CardContainer";
 import { createUrl } from "@/functions/createUrl";
 import styles from "@/styles/pageStyles/Home.module.scss";
-import { useContext, useEffect } from "react";
+import { useState } from "react";
 import {
   AllCountryContext,
   AllCountryContextProvider,
 } from "@/contexts/AllCountryContext";
+import SearchBar from "@/components/searchBar/SearchBar";
+import Dropdown from "@/components/dropdown/Dropdown";
 
 export const getStaticProps = async () => {
   const url = createUrl("all", {
@@ -21,13 +23,7 @@ export const getStaticProps = async () => {
 };
 
 export default function Home({ data }) {
-  const [allCountryData, setAllCountryData] = useContext(AllCountryContext);
-
-  useEffect(() => {
-    setAllCountryData(data);
-  }, []);
-
-  console.log(allCountryData);
+  const [filteredRegion, setFilteredRegion] = useState(null);
 
   return (
     <>
@@ -40,7 +36,12 @@ export default function Home({ data }) {
       <AllCountryContextProvider>
         <main className={styles.main}>
           <TitleBar />
-          <CardContainer data={data} />
+          <div className="forms-container">
+            <SearchBar data={data} />
+            <Dropdown data={data} setFilteredRegion={setFilteredRegion} />
+          </div>
+
+          <CardContainer data={data} filteredRegion={filteredRegion} />
         </main>
       </AllCountryContextProvider>
     </>
