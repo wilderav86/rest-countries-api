@@ -1,11 +1,12 @@
 // import "@/styles/globals.scss";
-import { AllCountryContextProvider } from "@/contexts/AllCountryContext";
+
+import { ThemeContextProvider } from "@/contexts/themeContext";
 import "../styles/globals.scss";
 
 export default function App({ Component, pageProps }) {
   return (
-    <AllCountryContextProvider>
+    <ThemeContextProvider>
       <Component {...pageProps} />
-    </AllCountryContextProvider>
+    </ThemeContextProvider>
   );
 }

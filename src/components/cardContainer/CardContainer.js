@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Card from "../card/Card";
+import styles from "../cardContainer/cardContainer.module.scss";
 
 const CardContainer = ({ data, filteredRegion }) => {
   const filteredByRegion = data.filter(
@@ -18,7 +19,7 @@ const CardContainer = ({ data, filteredRegion }) => {
     ? data.map(renderCards)
     : filteredByRegion.map(renderCards);
 
-  return <div>{checkFilteredRegion}</div>;
+  return <div className={styles.cardContainer}>{checkFilteredRegion}</div>;
 };
 
 export default CardContainer;

@@ -46,7 +46,7 @@ const Detail = ({ params, data }) => {
             Native Name: <span>{nativeName}</span>
           </li>
           <li>
-            Population: <span>{population}</span>
+            Population: <span>{population.toLocaleString("en-US")}</span>
           </li>
           <li>
             Region: <span>{region}</span>

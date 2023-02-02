@@ -3,13 +3,10 @@ import TitleBar from "@/components/titleBar/TitleBar";
 import CardContainer from "@/components/cardContainer/CardContainer";
 import { createUrl } from "@/functions/createUrl";
 import styles from "@/styles/pageStyles/Home.module.scss";
-import { useState } from "react";
-import {
-  AllCountryContext,
-  AllCountryContextProvider,
-} from "@/contexts/AllCountryContext";
+import { useContext, useState } from "react";
 import SearchBar from "@/components/searchBar/SearchBar";
 import Dropdown from "@/components/dropdown/Dropdown";
+import { ThemeContext } from "@/contexts/themeContext";
 
 export const getStaticProps = async () => {
   const url = createUrl("all", {
@@ -23,6 +20,7 @@ export const getStaticProps = async () => {
 };
 
 export default function Home({ data }) {
+  const [theme, setTheme] = useContext(ThemeContext);
   const [filteredRegion, setFilteredRegion] = useState(null);
 
   return (
@@ -33,17 +31,16 @@ export default function Home({ data }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <AllCountryContextProvider>
-        <main className={styles.main}>
-          <TitleBar />
-          <div className="forms-container">
-            <SearchBar data={data} />
-            <Dropdown data={data} setFilteredRegion={setFilteredRegion} />
-          </div>
 
-          <CardContainer data={data} filteredRegion={filteredRegion} />
-        </main>
-      </AllCountryContextProvider>
+      <main className={theme === "Light" ? "lightMode" : "darkMode"}>
+        <TitleBar />
+        <div className={styles.formContainer}>
+          <SearchBar data={data} />
+          <Dropdown data={data} setFilteredRegion={setFilteredRegion} />
+        </div>
+
+        <CardContainer data={data} filteredRegion={filteredRegion} />
+      </main>
     </>
   );
 }

@@ -1,2 +1,15 @@
 @use "utils/mixins/css-reset" as *;
+@use "utils/colors/colors" as *;
 @include css-reset;
+
+// Theme
+
+.darkMode {
+  background-color: map-get($darkMode, "background");
+  color: map-get($darkMode, "text");
+}
+
+.lightMode {
+  background-color: map-get($lightMode, "background");
+  color: map-get($lightMode, "text");
+}
