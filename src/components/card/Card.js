@@ -6,7 +6,7 @@ const Card = ({ data }) => {
   const { png } = data.flags;
 
   return (
-    <div className="container">
+    <div className={styles.container}>
       <Image
         src={png}
         alt="flagImg"

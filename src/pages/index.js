@@ -23,6 +23,7 @@ export default function Home({ data }) {
   const [theme, setTheme] = useContext(ThemeContext);
   const [filteredRegion, setFilteredRegion] = useState(null);
 
+  console.log("index", data);
   return (
     <>
       <Head>

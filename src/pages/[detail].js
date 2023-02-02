@@ -3,17 +3,25 @@ import Link from "next/link";
 const { default: Image } = require("next/image");
 
 export const getServerSideProps = async (context) => {
+  //initial country data
   const url = `https://restcountries.com/v2/name/${context.params.detail}`;
 
   const response = await fetch(url);
   const data = await response.json();
 
+  //bordering countries data
+  const borderingCountryCodes = data[0].borders.join(",");
+  const borderCountryUrl = `https://restcountries.com/v2/alpha?codes=${borderingCountryCodes}`;
+
+  const borderCountryResponse = await fetch(borderCountryUrl);
+  const borderCountryData = await borderCountryResponse.json();
+
   return {
-    props: { params: context.params, data: data.at(0) },
+    props: { params: context.params, data: data.at(0), borderCountryData },
   };
 };
 
-const Detail = ({ params, data }) => {
+const Detail = ({ params, data, borderCountryData }) => {
   const {
     nativeName,
     population,
@@ -26,10 +34,24 @@ const Detail = ({ params, data }) => {
     flags: { png },
   } = data;
 
+  console.log(data, borderCountryData);
+
   const renderListItem = ({ name }, index, list) => {
     if (list.length - 1 === index) name += ", ";
     return <span key={name + index}>{name}</span>;
   };
+
+  const renderBorderCountryLinks = borderCountryData.map(
+    (borderCountry, index) => {
+      return (
+        <li>
+          <Link href={"/" + borderCountry.name} key={index}>
+            {borderCountry.name}
+          </Link>
+        </li>
+      );
+    }
+  );
 
   console.log("map", currencies.map(renderListItem));
 
@@ -63,6 +85,12 @@ const Detail = ({ params, data }) => {
           <li>Currencies: {currencies.map(renderListItem)}</li>
           <li>Languages: {languages.map(renderListItem)}</li>
         </ul>
+        <div className="borderCountriesContainer">
+          <ul>
+            Bordering Countries:
+            {renderBorderCountryLinks}
+          </ul>
+        </div>
       </div>
     </div>
   );
