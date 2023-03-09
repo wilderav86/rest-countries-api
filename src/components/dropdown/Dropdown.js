@@ -1,11 +1,8 @@
 const Dropdown = ({ data, setFilteredRegion }) => {
-  console.log("data:", data);
   const regions = [];
   data.forEach((country) => {
     if (!regions.includes(country.region)) regions.push(country.region);
   });
-
-  console.log(regions);
 
   const handleChange = (e) => {
     e.target.value === "all"

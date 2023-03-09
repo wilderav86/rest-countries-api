@@ -10,9 +10,11 @@ export const getServerSideProps = async (context) => {
   const data = await response.json();
 
   //bordering countries data
-  const borderingCountryCodes = data[0].borders.join(",");
+  let borderingCountryCodes = "";
+  if (data.at(0).borders) {
+    borderingCountryCodes = data.at(0).borders.join(",");
+  }
   const borderCountryUrl = `https://restcountries.com/v2/alpha?codes=${borderingCountryCodes}`;
-
   const borderCountryResponse = await fetch(borderCountryUrl);
   const borderCountryData = await borderCountryResponse.json();
 
@@ -34,26 +36,25 @@ const Detail = ({ params, data, borderCountryData }) => {
     flags: { png },
   } = data;
 
-  console.log(data, borderCountryData);
+  console.log("borders", borderCountryData);
 
   const renderListItem = ({ name }, index, list) => {
-    if (list.length - 1 === index) name += ", ";
+    if (list.length - 1 !== index) name += ", ";
+
     return <span key={name + index}>{name}</span>;
   };
 
-  const renderBorderCountryLinks = borderCountryData.map(
-    (borderCountry, index) => {
+  const renderBorderCountryLinks = borderCountryData.length ? (
+    borderCountryData.map((borderCountry, index) => {
       return (
-        <li>
-          <Link href={"/" + borderCountry.name} key={index}>
-            {borderCountry.name}
-          </Link>
+        <li key={index}>
+          <Link href={"/" + borderCountry.name}>{borderCountry.name}</Link>
         </li>
       );
-    }
+    })
+  ) : (
+    <li>None</li>
   );
-
-  console.log("map", currencies.map(renderListItem));
 
   return (
     <div className="container">
@@ -82,8 +83,14 @@ const Detail = ({ params, data, borderCountryData }) => {
           <li>
             Top Level Domain: <span>{topLevelDomain}</span>
           </li>
-          <li>Currencies: {currencies.map(renderListItem)}</li>
-          <li>Languages: {languages.map(renderListItem)}</li>
+          <li>
+            Currencies:{" "}
+            {currencies ? currencies.map(renderListItem) : <span>None</span>}
+          </li>
+          <li>
+            Languages:{" "}
+            {languages ? languages.map(renderListItem) : <span>None</span>}
+          </li>
         </ul>
         <div className="borderCountriesContainer">
           <ul>
